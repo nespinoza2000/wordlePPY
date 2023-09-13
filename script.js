@@ -1,6 +1,14 @@
 let intentos = 6;
 let diccionario = ['PERLA', 'PERAS', 'CARRO', 'LUJOS', 'LOBOS', 'LUCIA', 'NICOL', 'AVION', 'VOLAR', 'JUEGO']
-const palabra = diccionario[Math.floor(Math.random() * diccionario.length)];
+let palabra = diccionario[Math.floor(Math.random() * diccionario.length)];
+
+fetch('https://random-word-api.herokuapp.com/word?length=5&lang=en')
+ 	.then(response => response.json())
+ 	.then(response => {
+         console.log(response)
+         palabra = response[0].toUpperCase()
+     })
+ 	.catch(err => console.error(err));
 
 window.addEventListener('load', init)
 function init(){
@@ -10,7 +18,8 @@ function init(){
 function intentar(){
     const INTENTO = leerIntento();
     if (INTENTO === palabra ) {
-        terminar("<h1>GANASTE</h1>")
+        terminar("<h1>GANASTE</h1>");
+        mostrarPalabraCorrecta();
         return
     }
     const GRID = document.getElementById("grid");
@@ -35,7 +44,13 @@ function intentar(){
 		intentos--
     if (intentos==0){
         terminar("<h1>PERDISTE</h1>")
+        mostrarPalabraCorrecta();
     }
+}
+
+function mostrarPalabraCorrecta() {
+    const resultadoDiv = document.getElementById("resultado");
+    resultadoDiv.innerHTML = `<p>La palabra correcta era: ${palabra}</p>`;
 }
 
 const button = document.getElementById("guess-button");
@@ -58,7 +73,6 @@ function terminar(mensaje){
     contenedor.innerHTML = mensaje;
 }
 
-Math.floor(Math.random() * (max - min + 1)) + min;
 Math.floor(Math.random() * 10) + 1;
 
 
